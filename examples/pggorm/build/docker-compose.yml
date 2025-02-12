@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:16-alpine3.20
+    environment:
+      POSTGRES_DB: "astronomical_objects"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - pg_16:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pg_16:
