@@ -4,8 +4,6 @@ import (
 	"context"
 	"github.com/igordth/database-simplify/pggorm"
 	"go.uber.org/zap"
-	"gorm.io/gorm/logger"
-	"time"
 )
 
 func main() {
@@ -19,25 +17,8 @@ func main() {
 
 	// connection
 	cnn, df, err := pggorm.NewConnection(
-		// connection config
-		pggorm.Config{
-			Name:        "astronomical_objects",
-			User:        "user",
-			Password:    "password",
-			Host:        "localhost",
-			MaxOpenConn: 1,
-			MaxIdleConn: 1,
-		},
-		// gorm logger
-		pggorm.NewLog(
-			zapLog,
-			logger.Config{
-				SlowThreshold:             time.Second,
-				Colorful:                  true,
-				IgnoreRecordNotFoundError: true,
-				LogLevel:                  logger.Info,
-			},
-		),
+		gormConfig,
+		pggorm.NewLog(zapLog, logConfig),
 	)
 	if err != nil {
 		zapLog.Panic("pggorm.NewConnection", zap.Error(err))
