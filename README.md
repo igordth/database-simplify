@@ -76,3 +76,8 @@ defer df()
 * `TrxRollback(ctx *context.Context)` - roll back a transaction by context
 * `TrxCommit(ctx *context.Context)` - commit transaction by context
 
+### Usage
+
+```go
+// todo
+```
