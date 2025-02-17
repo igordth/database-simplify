@@ -29,12 +29,16 @@ func main() {
 
 	// Define gates
 	gl := galaxy.New(cnn)
-	//st := star.New(cnn)
 	pl := planet.New(cnn)
 
 	// Work with find in galaxies
 	if err = findGalaxy(ctx, gl, zapLog); err != nil {
 		zapLog.Panic("findGalaxy", zap.Error(err))
+	}
+
+	// Work with find in planets
+	if err = findPlanetsWithPreload(ctx, pl, zapLog); err != nil {
+		zapLog.Panic("findPlanetsWithPreload", zap.Error(err))
 	}
 
 	// Work with count in planets

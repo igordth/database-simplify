@@ -8,26 +8,25 @@ type With interface {
 	Apply(tx *gorm.DB)
 }
 
+type condQueryArgs struct {
+	query any
+	args  []any
+}
+
 // WPreload - preload associations with given conditions
 // [docs]: https://gorm.io/docs/preload.html#Preload
 type WPreload struct {
-	cond map[string][]any
+	cond []condQueryArgs
 }
 
 func (w *WPreload) Set(query string, args ...any) *WPreload {
-	if w.cond == nil {
-		w.cond = make(map[string][]any)
-	}
-	w.cond[query] = append(w.cond[query], args...)
+	w.cond = append(w.cond, condQueryArgs{query: query, args: args})
 	return w
 }
 
 func (w *WPreload) Apply(tx *gorm.DB) {
-	if w.cond == nil {
-		return
-	}
-	for query, args := range w.cond {
-		tx.Preload(query, args)
+	for _, cond := range w.cond {
+		tx.Preload(cond.query.(string), cond.args)
 	}
 }
 
@@ -48,24 +47,19 @@ func (w *WOrder) Apply(tx *gorm.DB) {
 	}
 }
 
-type cond struct {
-	query any
-	args  []any
-}
-
 // WWhere - add where conditions
 // [docs]: https://gorm.io/docs/query.html#Conditions
 type WWhere struct {
-	condition []cond
+	cond []condQueryArgs
 }
 
 func (w *WWhere) Set(query any, args ...any) *WWhere {
-	w.condition = append(w.condition, cond{query: query, args: args})
+	w.cond = append(w.cond, condQueryArgs{query: query, args: args})
 	return w
 }
 
 func (w *WWhere) Apply(tx *gorm.DB) {
-	for _, c := range w.condition {
+	for _, c := range w.cond {
 		tx.Where(c.query, c.args...)
 	}
 }
@@ -91,23 +85,17 @@ func (w *WLimit) Apply(tx *gorm.DB) {
 // [docs]: https://gorm.io/docs/query.html#Joins
 // [docs]: https://gorm.io/docs/query.html#Joins-Preloading
 type WJoins struct {
-	cond map[string][]any
+	cond []condQueryArgs
 }
 
 func (w *WJoins) Set(query string, args ...any) *WJoins {
-	if w.cond == nil {
-		w.cond = make(map[string][]any)
-	}
-	w.cond[query] = append(w.cond[query], args...)
+	w.cond = append(w.cond, condQueryArgs{query: query, args: args})
 	return w
 }
 
 func (w *WJoins) Apply(tx *gorm.DB) {
-	if w.cond == nil {
-		return
-	}
-	for query, args := range w.cond {
-		tx.Joins(query, args)
+	for _, cond := range w.cond {
+		tx.Joins(cond.query.(string), cond.args...)
 	}
 }
 
@@ -169,11 +157,11 @@ func (w *WDistinct) Apply(tx *gorm.DB) {
 // WSelect - specify fields that you want when querying, creating, updating
 // [docs]: https://gorm.io/docs/query.html#Selecting-Specific-Fields
 type WSelect struct {
-	condition []cond
+	condition []condQueryArgs
 }
 
 func (w *WSelect) Set(query any, args ...any) *WSelect {
-	w.condition = append(w.condition, cond{query: query, args: args})
+	w.condition = append(w.condition, condQueryArgs{query: query, args: args})
 	return w
 }
 

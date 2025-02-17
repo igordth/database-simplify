@@ -12,7 +12,7 @@ func countPlanets(ctx context.Context, gate *planet.Planet, log *zap.Logger) err
 	// SELECT count(*) FROM "planets"
 	count, err := gate.Count.Execute(ctx)
 	if err != nil {
-		return errors.Wrap(err, "Execute.Execute")
+		return errors.Wrap(err, "Count.Execute")
 	}
 	log.Debug("count of all planets", zap.Reflect("count", count))
 
@@ -22,9 +22,9 @@ func countPlanets(ctx context.Context, gate *planet.Planet, log *zap.Logger) err
 		With(with.Distinct("star_id")).
 		Execute(ctx)
 	if err != nil {
-		return errors.Wrap(err, "Execute.Execute")
+		return errors.Wrap(err, "Count.Execute")
 	}
-	log.Debug("count of all planets", zap.Reflect("count", count))
+	log.Debug("count of all planets with distinct", zap.Reflect("count", count))
 
 	return nil
 }

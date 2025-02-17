@@ -34,9 +34,9 @@ func (fn *Find[T]) Execute(ctx context.Context, conds ...any) (T, error) {
 	tx := fn.prepareTx(ctx, res)
 	switch reflect.TypeOf(*new(T)).Kind() {
 	case reflect.Pointer:
-		tx.First(&res, conds)
+		tx.First(&res, conds...)
 	default:
-		tx.Find(&res, conds)
+		tx.Find(&res, conds...)
 	}
 	return res, tx.Error
 }

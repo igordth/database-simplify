@@ -11,7 +11,7 @@ func Apply(tx *gorm.DB, ww ...With) {
 }
 
 func Preload(query string, args ...any) *WPreload {
-	return new(WPreload).Set(query, args)
+	return new(WPreload).Set(query, args...)
 }
 
 func Order(values ...string) *WOrder {
@@ -19,7 +19,7 @@ func Order(values ...string) *WOrder {
 }
 
 func Where(query any, args ...any) *WWhere {
-	return new(WWhere).Set(query, args)
+	return new(WWhere).Set(query, args...)
 }
 
 func Limit(limit int, offset int) *WLimit {
@@ -27,7 +27,7 @@ func Limit(limit int, offset int) *WLimit {
 }
 
 func Joins(query string, args ...any) *WJoins {
-	return new(WJoins).Set(query, args)
+	return new(WJoins).Set(query, args...)
 }
 
 func GroupBy(query string) *WGroupBy {
@@ -35,7 +35,7 @@ func GroupBy(query string) *WGroupBy {
 }
 
 func Having(query string, args ...any) *WHaving {
-	return new(WHaving).Set(query, args)
+	return new(WHaving).Set(query, args...)
 }
 
 func Distinct(values ...string) *WDistinct {
@@ -43,7 +43,7 @@ func Distinct(values ...string) *WDistinct {
 }
 
 func Select(query any, args ...any) *WSelect {
-	return new(WSelect).Set(query, args)
+	return new(WSelect).Set(query, args...)
 }
 
 func Omit(columns ...string) *WOmit {

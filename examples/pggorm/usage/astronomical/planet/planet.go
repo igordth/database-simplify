@@ -7,6 +7,7 @@ import (
 
 type Planet struct {
 	pggorm.Connect
+	usage.FindCompare[Model]
 	usage.CountCompare[Model]
 	usage.CreateCompare[Model]
 	usage.SaveCompare[Model]
@@ -17,6 +18,7 @@ type Planet struct {
 func New(cnn pggorm.Connect) *Planet {
 	return &Planet{
 		cnn,
+		usage.NewFindCompare[Model](cnn),
 		usage.NewCountCompare[Model](cnn),
 		usage.NewCreateCompare[Model](cnn),
 		usage.NewSaveCompare[Model](cnn),

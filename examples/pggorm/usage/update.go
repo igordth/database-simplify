@@ -9,7 +9,7 @@ import (
 )
 
 func updatePlanets(ctx context.Context, gate *planet.Planet, log *zap.Logger) error {
-	// UPDATE "planets" SET "star_id"=1 WHERE "id" IN (6)
+	// UPDATE "planets" SET "star_id"=1 WHERE "id" = 6
 	affected, err := gate.Update.Column.
 		With(with.Where("id", 6)).
 		Execute(ctx, "star_id", 1)
@@ -20,7 +20,7 @@ func updatePlanets(ctx context.Context, gate *planet.Planet, log *zap.Logger) er
 
 	// UPDATE "planets" SET "star_id"=1 WHERE "id" IN (7,8,9)
 	affected, err = gate.Update.Columns.
-		With(with.Where("id", 7, 8, 9)).
+		With(with.Where(7, 8, 9)).
 		Execute(ctx, map[string]any{
 			"star_id": 1,
 		})

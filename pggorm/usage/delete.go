@@ -25,7 +25,7 @@ type Delete[T any] struct{ usage }
 // Execute - deletes value matching given conditions
 // [docs]: https://gorm.io/docs/delete.html
 func (c *Delete[T]) Execute(ctx context.Context, value any, conds ...any) (err error) {
-	return c.prepareTx(ctx, new(T)).Delete(value, conds).Error
+	return c.prepareTx(ctx, new(T)).Delete(value, conds...).Error
 }
 
 func (c *Delete[T]) With(ww ...with.With) *Delete[T] {
