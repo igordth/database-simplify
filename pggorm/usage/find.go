@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/igordth/database-simplify/pggorm"
 	"github.com/igordth/database-simplify/pggorm/usage/with"
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
 	"reflect"
 )
 
@@ -27,7 +29,7 @@ func NewFind[T any](cnn pggorm.Connect) Find[T] {
 
 type Find[T any] struct{ usage }
 
-// Execute - Retrieving object(s) with conditions
+// Execute - retrieving object(s) with conditions
 // [docs]: https://gorm.io/docs/query.html
 func (fn *Find[T]) Execute(ctx context.Context, conds ...any) (T, error) {
 	var res T
@@ -37,6 +39,10 @@ func (fn *Find[T]) Execute(ctx context.Context, conds ...any) (T, error) {
 		tx.First(&res, conds...)
 	default:
 		tx.Find(&res, conds...)
+	}
+	// turn off error if record not found from First method
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+		return res, nil
 	}
 	return res, tx.Error
 }
