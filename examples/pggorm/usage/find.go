@@ -24,6 +24,13 @@ func findGalaxy(ctx context.Context, gate *galaxy.Galaxy, log *zap.Logger) error
 	}
 	log.Debug("galaxy find one with PK=2", zap.Reflect("model", model))
 
+	// SELECT * FROM "galaxies" WHERE "galaxies"."id" = 3 ORDER BY "galaxies"."id" LIMIT 1
+	model, err = gate.Find.One.Execute(ctx, 3)
+	if err != nil {
+		return errors.Wrap(err, "Find.One.Execute with PK")
+	}
+	log.Debug("galaxy find one with PK=3 (not exist)", zap.Reflect("model", model)) // model is null
+
 	// SELECT * FROM "galaxies" WHERE name like 'Milky%' ORDER BY name desc LIMIT 5
 	models, err := gate.Find.Many.
 		With(

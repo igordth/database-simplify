@@ -42,7 +42,8 @@ func (fn *Find[T]) Execute(ctx context.Context, conds ...any) (T, error) {
 	}
 	// turn off error if record not found from First method
 	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-		return res, nil
+		var zero T
+		return zero, nil
 	}
 	return res, tx.Error
 }
